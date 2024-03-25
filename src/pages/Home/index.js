@@ -1,7 +1,7 @@
 function Home() {
   return (
     <>
-        Home is working
+      Home is working
     </>
   );
 }
