@@ -70,7 +70,7 @@ function Login() {
                                 <div className="mb-6">
                                     <button type="submit" className="btn btn-primary w-full bg-red-500">Sign in</button>
                                 </div>
-                                <p className="text-sm text-center text-gray-400">Don&#x27;t have an account yet? <a href="#!" className="text-indigo-400 focus:outline-none focus:underline focus:text-indigo-500">Sign up</a>.</p>
+                                <p className="text-sm text-center text-gray-400">Don&#x27;t have an account yet? <a href="/signup" className="text-indigo-400 focus:outline-none focus:underline focus:text-indigo-500">Sign Up</a>.</p>
                             </form>
                         </div>
                     </div>
