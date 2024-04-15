@@ -1,19 +1,40 @@
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import './index.css';
 
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { login } from '../../services/users';
+
+import CustomInput from '../../components/CustomInput';
+import RippleButton from '../../components/Buttons/RippleButton';
+
 function Login() {
+    const navigate = useNavigate();
+
     const { handleSubmit, handleChange, handleBlur, values, touched, errors, } = useFormik({
         initialValues: {
-            email: '',
+            phone: '',
             password: ''
         },
         validationSchema: Yup.object({
-            email: Yup.string().email('Invalid email address').required('Required'),
+            phone: Yup.string().required('Required').matches(/^[0-9]+$/, 'Must be only digits').min(10, 'Phone number must be at least 10 digits').max(10, 'Phone number must be at most 10 digits'),
             password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
         }),
-        onSubmit: ({ email, password }) => {
-            alert(`Email: ${email}, Password: ${password}`);
+        onSubmit: async (values) => {
+            console.log(values);
+            const response = await login(values);
+            const data = await response.json();
+
+            if (response.ok) {
+                toast.success('Se ha iniciado sesión correctamente');
+                localStorage.setItem('token', data.data.token);
+                navigate('/');
+            }
+            else {
+                toast.error('Error al iniciar sesión');
+            }
         }
     });
 
@@ -23,54 +44,19 @@ function Login() {
                 <div className="container mx-auto">
                     <div className="max-w-md mx-auto my-10">
                         <div className="text-center">
-                            <h1 className="my-3 text-3xl font-semibold text-gray-700">Sign in</h1>
-                            <p className="text-gray-500">Sign in to access your account</p>
+                            <h1 className="my-3 text-3xl font-semibold text-gray-700">Iniciar Sesión</h1>
+                            <p className="text-gray-500">Inicia sesión para acceder a tu cuenta</p>
                         </div>
                         <div className="m-7">
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} className='flex flex-col gap-10'>
+                                <CustomInput label="Número de teléfono" type="tel" id="phone" name="phone" value={values.phone} onChange={handleChange} onBlur={handleBlur} touched={touched} errors={errors} autoComplete="off" placeholder="Número de teléfono" />
+
+                                <CustomInput label="Contraseña" type="password" id="password" name="password" value={values.password} onChange={handleChange} onBlur={handleBlur} touched={touched} errors={errors} autoComplete="off" placeholder="Contraseña" />
+
                                 <div className="mb-6">
-                                    <label htmlFor="email" className="block mb-2 text-sm text-gray-600">Email Address</label>
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        value={values.email}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={"form-control" + (touched.email && errors.email ? " is-invalid" : "") + (touched.email && !errors.email ? " is-valid" : "")}
-                                        required />
-                                    {touched.email && !errors.email ? (
-                                        <div className="valid-feedback">Looks good!</div>
-                                    ) : null}
-                                    {touched.email && errors.email ? (
-                                        <div className="invalid-feedback">{errors.email}</div>
-                                    ) : null}
+                                    <RippleButton type="submit" text="Iniciar Sesión" color="bg-primary" />
                                 </div>
-                                <div className="mb-6">
-                                    <div className="flex justify-between mb-2">
-                                        <label htmlFor="password" className="text-sm text-gray-600">Password</label>
-                                        <a href="#!" className="text-sm text-gray-400 focus:outline-none focus:text-indigo-500 hover:text-indigo-500">Forgot password?</a>
-                                    </div>
-                                    <input
-                                        id="password"
-                                        name="password"
-                                        type="password"
-                                        value={values.password}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={"form-control" + (touched.password && errors.password ? " is-invalid" : "") + (touched.password && !errors.password ? " is-valid" : "")}
-                                        required />
-                                    {touched.password && !errors.password ? (
-                                        <div className="valid-feedback">Looks good!</div>
-                                    ) : null}
-                                    {touched.password && errors.password ? (
-                                        <div className="invalid-feedback">{errors.password}</div>
-                                    ) : null}
-                                </div>
-                                <div className="mb-6">
-                                    <button type="submit" className="btn btn-primary w-full bg-red-500">Sign in</button>
-                                </div>
-                                <p className="text-sm text-center text-gray-400">Don&#x27;t have an account yet? <a href="/signup" className="text-indigo-400 focus:outline-none focus:underline focus:text-indigo-500">Sign Up</a>.</p>
+                                <p className="text-sm text-center text-gray-400">¿Aún no tienes una cuenta? <a href="/signup" className="text-indigo-400 focus:outline-none focus:underline focus:text-indigo-500">Regístrate</a>.</p>
                             </form>
                         </div>
                     </div>

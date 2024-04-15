@@ -1,0 +1,41 @@
+/* ----------------General---------------- */
+.ripple-effect {
+    position: absolute;
+    background-color: #ffffff50;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: ripple-animation 0.5s linear;
+}
+
+
+
+
+
+
+/* ----------------Colors---------------- */
+.purple {
+    background: linear-gradient(180deg, #584b6e, #30212b);
+}
+
+.purple:hover {
+    background: linear-gradient(180deg, #705c94, #30212b);
+}
+
+
+
+
+
+
+/* ----------------Animation---------------- */
+@keyframes ripple-animation {
+    0% {
+        width: 0px;
+        height: 0px;
+        opacity: 0.4;
+    }
+    100% {
+        width: 500px;
+        height: 500px;
+        opacity: 0;
+    }
+}
