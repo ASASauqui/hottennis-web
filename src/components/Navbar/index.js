@@ -2,7 +2,6 @@ import './index.css';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { checkToken } from '../../services/users';
 
 function Navbar() {
     const { user, logout } = useAuth();
@@ -15,19 +14,6 @@ function Navbar() {
     const handleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
-
-    // useEffect(() => {
-    //     const checkUserToken = async () => {
-    //         if (user) {
-    //             const response = await checkToken(user.token);
-    //             const data = await response.json();
-
-    //             console.log(data, 'checkToken');
-    //         }
-    //     };
-
-    //     checkUserToken();
-    // }, [user, logout]);
 
     return (
         <>

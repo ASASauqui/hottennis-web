@@ -13,11 +13,11 @@ function CustomInput({ label, type, id, name, value, onChange, onBlur, touched, 
                 onChange={onChange}
                 onBlur={onBlur}
                 placeholder={placeholder}
-                className={"p-2 peer bg-gray-100 placeholder-transparent h-10 w-full border-b-2 text-gray-900 focus:outline-none"
+                className={"p-2 peer bg-white placeholder-transparent h-10 w-full border-2 text-gray-900 focus:outline-none rounded-md"
                 + (touched[name] && errors[name] ? " border-rose-600 bg-rose-100" : "") + (touched[name] && !errors[name] ? " border-green-600 bg-green-100" : " ")}
                 required />
             {touched[name] && !errors[name] ? (
-                <div className="mt-2 text-green-600">¡Luce bien!</div>
+                <div></div>
             ) : null}
             {touched[name] && errors[name] ? (
                 <div className="mt-2 text-rose-600">{errors[name]}</div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { useLocalStorage } from "./useLocalStorage";
 
-import { login, getUserInfo } from '../services/users';
+import { login, register, getUserInfo } from '../services/users';
 
 const AuthContext = createContext();
 
@@ -12,12 +12,14 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     // Call this function when you want to authenticate the user
-    const authenticateUser = async (values) => {
+    const loginUser = async (values) => {
         const loginResponse = await login(values);
         const loginData = await loginResponse.json();
 
         const userInfoResponse = await getUserInfo(loginData.data.token);
         const userInfoData = await userInfoResponse.json();
+
+        console.log(userInfoData);
 
         if (loginResponse.ok) {
             toast.success('Se ha iniciado sesión correctamente');
@@ -26,6 +28,32 @@ export const AuthProvider = ({ children }) => {
         }
         else {
             toast.error('Error al iniciar sesión');
+        }
+    };
+
+    // Call this function to register a new user
+    const registerUser = async (values) => {
+        const registerResponse = await register(values);
+        const registerData = await registerResponse.json();
+
+        if (registerResponse.ok) {
+            toast.success('Se ha registrado correctamente');
+            navigate("/login");
+        }
+        else {
+            toast.error('Error al registrar');
+        }
+    };
+
+    const updateUser = async () => {
+        const userInfoResponse = await getUserInfo(user.token);
+        const userInfoData = await userInfoResponse.json();
+
+        if (userInfoResponse.ok) {
+            setUser({token: user.token, user: userInfoData});
+        }
+        else {
+            toast.error('Error al actualizar la información del usuario');
         }
     };
 
@@ -39,7 +67,9 @@ export const AuthProvider = ({ children }) => {
     const value = useMemo(
         () => ({
             user,
-            authenticateUser,
+            loginUser,
+            registerUser,
+            updateUser,
             logout,
         }),
         [user]

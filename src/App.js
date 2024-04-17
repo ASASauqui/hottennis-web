@@ -10,6 +10,7 @@ import Product from "./pages/Product";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AlreadyAuthenticatedRoute } from "./components/AlreadyAuthenticatedRoute";
@@ -32,11 +33,11 @@ function App() {
               </>
             } />
             <Route path="/products" element={
-              <ProtectedRoute>
+              <>
                 <Navbar />
                 <Products />
                 <Footer />
-              </ProtectedRoute>} />
+              </>} />
             <Route path="/products/:id" element={
               <>
                 <Navbar />
@@ -61,6 +62,12 @@ function App() {
                 <Signup />
                 <Footer />
               </AlreadyAuthenticatedRoute>} />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Navbar />
+                <Profile />
+                <Footer />
+              </ProtectedRoute>} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

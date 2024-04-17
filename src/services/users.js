@@ -39,3 +39,14 @@ export const getUserInfo = async (token) => {
         }
     });
 };
+
+export const updateUserInfo = async (token, body) => {
+    return await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    });
+};
