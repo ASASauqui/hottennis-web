@@ -2,16 +2,13 @@ import './index.css';
 
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-
-import { login } from '../../services/users';
+import { useAuth } from '../../hooks/useAuth';
 
 import CustomInput from '../../components/CustomInput';
 import RippleButton from '../../components/Buttons/RippleButton';
 
 function Login() {
-    const navigate = useNavigate();
+    const { authenticateUser } = useAuth();
 
     const { handleSubmit, handleChange, handleBlur, values, touched, errors, } = useFormik({
         initialValues: {
@@ -23,18 +20,7 @@ function Login() {
             password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
         }),
         onSubmit: async (values) => {
-            console.log(values);
-            const response = await login(values);
-            const data = await response.json();
-
-            if (response.ok) {
-                toast.success('Se ha iniciado sesión correctamente');
-                localStorage.setItem('token', data.data.token);
-                navigate('/');
-            }
-            else {
-                toast.error('Error al iniciar sesión');
-            }
+            await authenticateUser(values)
         }
     });
 

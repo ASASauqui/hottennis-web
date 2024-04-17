@@ -31,18 +31,24 @@ function Products() {
     // ];
 
     useEffect(() => {
+        let timeoutId;
+
         const fetchProducts = async () => {
-            const response = await getProducts();
-            const data = await response.json();
+            timeoutId = setTimeout(async () => {
+                const response = await getProducts();
+                const data = await response.json();
 
-            console.log(data);
+                console.log(data);
 
-            if (response.ok) {
-                setProducts(data);
-            }
+                if (response.ok) {
+                    setProducts(data);
+                }
+            }, 1000);
         };
 
         fetchProducts();
+
+        return () => clearTimeout(timeoutId);
     }, []);
 
     return (

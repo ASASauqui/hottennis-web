@@ -11,6 +11,10 @@ import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AlreadyAuthenticatedRoute } from "./components/AlreadyAuthenticatedRoute";
+import { AuthProvider } from "./hooks/useAuth";
+
 function App() {
   return (
     <div className="min-w-[350px]">
@@ -18,43 +22,47 @@ function App() {
       <ToastContainer />
 
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <>
-              <Navbar />
-              <Home />
-              <Footer />
-            </>
-          } />
-          <Route path="/products" element={
-            <>
-              <Navbar />
-              <Products />
-              <Footer />
-            </>} />
-          <Route path="/products/:id" element={
-            <>
-              <Navbar />
-              <Product />
-              <Footer />
-            </>} />
-          <Route path="/checkout" element={
-            <>
-              <Navbar />
-              <Checkout />
-              <Footer />
-            </>} />
-          <Route path="/login" element={
-            <>
-              <Login />
-              <Footer />
-            </>} />
-          <Route path="/signup" element={
-            <>
-              <Signup />
-              <Footer />
-            </>} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={
+              <>
+                <Navbar />
+                <Home />
+                <Footer />
+              </>
+            } />
+            <Route path="/products" element={
+              <ProtectedRoute>
+                <Navbar />
+                <Products />
+                <Footer />
+              </ProtectedRoute>} />
+            <Route path="/products/:id" element={
+              <>
+                <Navbar />
+                <Product />
+                <Footer />
+              </>} />
+            <Route path="/checkout" element={
+              <>
+                <Navbar />
+                <Checkout />
+                <Footer />
+              </>} />
+            <Route path="/login" element={
+              <AlreadyAuthenticatedRoute>
+                <Navbar />
+                <Login />
+                <Footer />
+              </AlreadyAuthenticatedRoute>} />
+            <Route path="/signup" element={
+              <AlreadyAuthenticatedRoute>
+                <Navbar />
+                <Signup />
+                <Footer />
+              </AlreadyAuthenticatedRoute>} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );

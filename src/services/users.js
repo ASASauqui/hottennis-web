@@ -19,3 +19,23 @@ export const login = async (body) => {
         body: JSON.stringify(body)
     });
 };
+
+export const checkToken = async (token) => {
+    return await fetch(`${process.env.REACT_APP_API_URL}/users/check-token`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+};
+
+export const getUserInfo = async (token) => {
+    return await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+};
