@@ -11,6 +11,8 @@ import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import StripeSuccess from "./pages/Responses/Stripe/Success";
+import StripeCancel from "./pages/Responses/Stripe/Cancel";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AlreadyAuthenticatedRoute } from "./components/AlreadyAuthenticatedRoute";
@@ -70,6 +72,20 @@ function App() {
                   <Profile />
                   <Footer />
                 </ProtectedRoute>} />
+              <Route path="/success" element={
+                <>
+                  <Navbar />
+                  <StripeSuccess />
+                  <Footer />
+                </>
+              } />
+              <Route path="/cancel" element={
+                <>
+                  <Navbar />
+                  <StripeCancel />
+                  <Footer />
+                </>
+              } />
             </Routes>
           </AuthProvider>
         </ShoppingCartProvider>

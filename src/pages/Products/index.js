@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 
 import { getProducts } from '../../services/products';
 
@@ -57,20 +58,22 @@ function Products() {
                 const response = await getProducts();
                 const data = await response.json();
 
-                if (response.ok) {
-                    // Filter products with the values from the formik
-                    const filteredProducts = data.filter(product => {
-                        const brandMatch = !values.brand || product.brand.toLowerCase().includes(values.brand.toLowerCase());
-                        const minPriceMatch = !values.minPrice || product.price >= values.minPrice;
-                        const maxPriceMatch = !values.maxPrice || product.price <= values.maxPrice;
-                        const searchMatch = !values.search || product.title.toLowerCase().includes(values.search.toLowerCase());
-
-                        return brandMatch && minPriceMatch && maxPriceMatch && searchMatch;
-                    }
-                    );
-
-                    setProducts(filteredProducts);
+                if (!response.ok) {
+                    toast.error('Error al obtener los productos');
+                    return;
                 }
+
+                // Filter products with the values from the formik
+                const filteredProducts = data.filter(product => {
+                    const brandMatch = !values.brand || product.brand.toLowerCase().includes(values.brand.toLowerCase());
+                    const minPriceMatch = !values.minPrice || product.price >= values.minPrice;
+                    const maxPriceMatch = !values.maxPrice || product.price <= values.maxPrice;
+                    const searchMatch = !values.search || product.title.toLowerCase().includes(values.search.toLowerCase());
+
+                    return brandMatch && minPriceMatch && maxPriceMatch && searchMatch;
+                });
+
+                setProducts(filteredProducts);
             }, 1000);
         };
 

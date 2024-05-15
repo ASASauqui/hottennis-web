@@ -13,53 +13,79 @@ export const AuthProvider = ({ children }) => {
 
     // Call this function when you want to authenticate the user
     const loginUser = async (values) => {
-        const loginResponse = await login(values);
-        const loginData = await loginResponse.json();
+        try {
+            const loginResponse = await login(values);
+            const loginData = await loginResponse.json();
 
-        const userInfoResponse = await getUserInfo(loginData.data.token);
-        const userInfoData = await userInfoResponse.json();
+            if (!loginResponse.ok) {
+                toast.error('Error al iniciar sesión');
+                return;
+            }
 
-        if (loginResponse.ok) {
+            const userInfoResponse = await getUserInfo(loginData.data.token);
+            const userInfoData = await userInfoResponse.json();
+
+            if (!userInfoResponse.ok) {
+                toast.error('Error al iniciar sesión');
+                return;
+            }
+
             toast.success('Se ha iniciado sesión correctamente');
-            setUser({token: loginData.data.token, user: userInfoData});
+            setUser({ token: loginData.data.token, user: userInfoData });
             navigate("/");
         }
-        else {
+        catch (error) {
             toast.error('Error al iniciar sesión');
         }
     };
 
     // Call this function to register a new user
     const registerUser = async (values) => {
-        const registerResponse = await register(values);
-        const registerData = await registerResponse.json();
+        try {
+            const registerResponse = await register(values);
+            const registerData = await registerResponse.json();
 
-        if (registerResponse.ok) {
+            if (!registerResponse.ok) {
+                toast.error('Error al registrar');
+                return;
+            }
+
             toast.success('Se ha registrado correctamente');
             navigate("/login");
         }
-        else {
+        catch (error) {
             toast.error('Error al registrar');
         }
     };
 
     const updateUser = async () => {
-        const userInfoResponse = await getUserInfo(user.token);
-        const userInfoData = await userInfoResponse.json();
+        try {
+            const userInfoResponse = await getUserInfo(user.token);
+            const userInfoData = await userInfoResponse.json();
 
-        if (userInfoResponse.ok) {
-            setUser({token: user.token, user: userInfoData});
+            if (!userInfoResponse.ok) {
+                toast.error('Error al actualizar la información del usuario');
+                return;
+            }
+
+            setUser({ token: user.token, user: userInfoData });
         }
-        else {
+        catch (error) {
             toast.error('Error al actualizar la información del usuario');
         }
     };
 
     // Call this function to sign out logged in user
     const logout = () => {
-        setUser(null);
-        toast.success('Se ha cerrado sesión correctamente');
-        navigate("/login", { replace: true });
+        try {
+
+            setUser(null);
+            toast.success('Se ha cerrado sesión correctamente');
+            navigate("/login", { replace: true });
+        }
+        catch (error) {
+            toast.error('Error al cerrar sesión');
+        }
     };
 
     const value = useMemo(

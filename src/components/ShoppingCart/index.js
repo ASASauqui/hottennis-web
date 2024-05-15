@@ -1,12 +1,16 @@
 import './index.css';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { loadStripe } from '@stripe/stripe-js';
 import { useShoppingCart } from '../../hooks/useShoppingCart';
+import { toast } from 'react-toastify';
 import { getProduct } from '../../services/products';
+import { createCheckoutSession } from '../../services/payments';
 import RippleButton from '../../components/Buttons/RippleButton';
 
 function ShoppingCart() {
+    const { user } = useAuth();
     const { shoppingCart, showShoppingCart, addItem, removeItem, setItemQuantity, emptyCart, setShowShoppingCart } = useShoppingCart();
     const [products, setProducts] = useState([]);
 
@@ -33,6 +37,37 @@ function ShoppingCart() {
             minimumFractionDigits: 2
         }).format(price);
     };
+
+    const makePayment = async () => {
+        if (products.length === 0) {
+            return;
+        }
+
+        try {
+            const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+            const response = await createCheckoutSession(user.token, products);
+            const session = await response.json();
+
+            if (response.ok === false) {
+                toast.error('Error al procesar el pago');
+                return;
+            }
+
+            const result = stripe.redirectToCheckout({
+                sessionId: session.id,
+            });
+
+            if (result.error) {
+                toast.error('Error al procesar el pago');
+            }
+
+            emptyCart();
+        } catch (error) {
+            toast.error('Error al procesar el pago');
+        }
+    };
+
 
     useEffect(() => {
         if (shoppingCart == []) {
@@ -155,7 +190,9 @@ function ShoppingCart() {
                                     <RippleButton text="Vaciar carrito" type="button" color="bg-red-500"
                                         onClick={() => emptyCart()}
                                         textColor="text-white" />
-                                    <RippleButton text="Comprar" type="button" color="bg-black" textColor="text-white" />
+                                    <RippleButton text="Comprar" type="button" color="bg-black"
+                                        onClick={() => makePayment()}
+                                        textColor="text-white" />
                                 </div>
                             )}
 
