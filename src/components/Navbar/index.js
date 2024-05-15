@@ -2,14 +2,26 @@ import './index.css';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { useShoppingCart } from '../../hooks/useShoppingCart';
+import ShoppingCart from '../ShoppingCart';
 
 function Navbar() {
     const { user, logout } = useAuth();
+    const { shoppingCart, showShoppingCart, setShowShoppingCart } = useShoppingCart();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [totalAmountOfItems, setTotalAmountOfItems] = useState(0);
 
     const handleLogout = () => {
         logout();
     };
+
+    const getTotalAmountOfItems = (shoppingCart) => {
+        return shoppingCart.reduce((acc, item) => acc + item.quantity, 0);
+    };
+
+    useEffect(() => {
+        setTotalAmountOfItems(getTotalAmountOfItems(shoppingCart));
+    }, [shoppingCart]);
 
     const handleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -82,7 +94,8 @@ function Navbar() {
                     {user ? (
                         <div className="relative flex items-center gap-3">
                             {/* <!-- Icon --> */}
-                            <a className="text-neutral-600" href="#">
+                            <div onClick={() => setShowShoppingCart(!showShoppingCart)}
+                                className="text-neutral-600" >
                                 <span className="[&>svg]:w-5">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -94,10 +107,12 @@ function Navbar() {
                                     </svg>
                                 </span>
                                 {/* <!-- Notification counter --> */}
-                                <span
-                                    className="absolute -mt-4 ms-2.5 rounded-full bg-rose-500 px-[0.35em] py-[0.15em] text-[0.6rem] font-bold leading-none text-white"
-                                >1</span>
-                            </a>
+                                {totalAmountOfItems > 0 && (
+                                    <span
+                                        className="absolute -mt-4 ms-2.5 rounded-full bg-rose-500 px-[0.35em] py-[0.15em] text-[0.6rem] font-bold leading-none text-white"
+                                    >{totalAmountOfItems}</span>
+                                )}
+                            </div>
 
                             {/* <!-- Second dropdown container --> */}
                             <div
@@ -107,7 +122,7 @@ function Navbar() {
                                     className="flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
                                     href="/profile"
                                     role="button">
-                                    {user && user.user.profileImage !== null && user.user.profileImage !== '' ? (
+                                    {user && user.user && user.user.profileImage !== null && user.user.profileImage !== '' ? (
                                         <img
                                             src={user.user.profileImage}
                                             className="rounded-full"
@@ -164,6 +179,9 @@ function Navbar() {
                     )}
                 </div>
             </nav>
+
+            {/* <!-- Shopping cart modal --> */}
+            {showShoppingCart && <ShoppingCart />}
         </>
     );
 }

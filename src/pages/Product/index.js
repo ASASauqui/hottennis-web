@@ -2,11 +2,13 @@ import './index.css';
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useShoppingCart } from '../../hooks/useShoppingCart';
 import { getProduct } from '../../services/products';
 import RippleButton from '../../components/Buttons/RippleButton';
 
 function Product() {
     const { id } = useParams();
+    const { addItem } = useShoppingCart();
     const [product, setProduct] = useState(null);
     const [imageIndex, setImageIndex] = useState(0);
 
@@ -33,6 +35,10 @@ function Product() {
 
     const handleNextImage = () => {
         setImageIndex((prevIndex) => prevIndex < product?.images?.length - 1 ? prevIndex + 1 : 0);
+    };
+
+    const handleAddToCart = () => {
+        addItem(id);
     };
 
     return (
@@ -94,7 +100,9 @@ function Product() {
 
 
                             <div>
-                                <RippleButton type="submit" text="Añadir al carrito" color="bg-primary" />
+                                <RippleButton type="submit" text="Añadir al carrito"
+                                onClick={handleAddToCart}
+                                color="bg-primary" />
                             </div>
                         </div>
                     </div>

@@ -2,7 +2,6 @@ import './index.css';
 
 import useTyped from '../../hooks/useTyped';
 import About from '../../components/About';
-import ShoppingCart from '../../components/ShoppingCart';
 
 function Home() {
   const texts = [
@@ -51,7 +50,6 @@ function Home() {
           </div>
         </div>
       </div>
-      {/* <ShoppingCart /> */}
 
       <About />
     </>

@@ -1,5 +1,5 @@
 export const register = async (body) => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/users/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -10,7 +10,7 @@ export const register = async (body) => {
 };
 
 export const login = async (body) => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export const login = async (body) => {
 };
 
 export const checkToken = async (token) => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/users/check-token`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/users/check-token`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export const checkToken = async (token) => {
 };
 
 export const getUserInfo = async (token) => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export const getUserInfo = async (token) => {
 };
 
 export const updateUserInfo = async (token, body) => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/users`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/users`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

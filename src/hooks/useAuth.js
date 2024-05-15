@@ -19,8 +19,6 @@ export const AuthProvider = ({ children }) => {
         const userInfoResponse = await getUserInfo(loginData.data.token);
         const userInfoData = await userInfoResponse.json();
 
-        console.log(userInfoData);
-
         if (loginResponse.ok) {
             toast.success('Se ha iniciado sesión correctamente');
             setUser({token: loginData.data.token, user: userInfoData});

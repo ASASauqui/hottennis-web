@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AlreadyAuthenticatedRoute } from "./components/AlreadyAuthenticatedRoute";
 import { AuthProvider } from "./hooks/useAuth";
+import { ShoppingCartProvider } from "./hooks/useShoppingCart";
 
 function App() {
   return (
@@ -23,53 +24,55 @@ function App() {
       <ToastContainer />
 
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={
-              <>
-                <Navbar />
-                <Home />
-                <Footer />
-              </>
-            } />
-            <Route path="/products" element={
-              <>
-                <Navbar />
-                <Products />
-                <Footer />
-              </>} />
-            <Route path="/products/:id" element={
-              <>
-                <Navbar />
-                <Product />
-                <Footer />
-              </>} />
-            <Route path="/checkout" element={
-              <>
-                <Navbar />
-                <Checkout />
-                <Footer />
-              </>} />
-            <Route path="/login" element={
-              <AlreadyAuthenticatedRoute>
-                <Navbar />
-                <Login />
-                <Footer />
-              </AlreadyAuthenticatedRoute>} />
-            <Route path="/signup" element={
-              <AlreadyAuthenticatedRoute>
-                <Navbar />
-                <Signup />
-                <Footer />
-              </AlreadyAuthenticatedRoute>} />
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <Navbar />
-                <Profile />
-                <Footer />
-              </ProtectedRoute>} />
-          </Routes>
-        </AuthProvider>
+        <ShoppingCartProvider>
+          <AuthProvider>
+            <Routes>
+              <Route path="/" element={
+                <>
+                  <Navbar />
+                  <Home />
+                  <Footer />
+                </>
+              } />
+              <Route path="/products" element={
+                <>
+                  <Navbar />
+                  <Products />
+                  <Footer />
+                </>} />
+              <Route path="/products/:id" element={
+                <>
+                  <Navbar />
+                  <Product />
+                  <Footer />
+                </>} />
+              <Route path="/checkout" element={
+                <>
+                  <Navbar />
+                  <Checkout />
+                  <Footer />
+                </>} />
+              <Route path="/login" element={
+                <AlreadyAuthenticatedRoute>
+                  <Navbar />
+                  <Login />
+                  <Footer />
+                </AlreadyAuthenticatedRoute>} />
+              <Route path="/signup" element={
+                <AlreadyAuthenticatedRoute>
+                  <Navbar />
+                  <Signup />
+                  <Footer />
+                </AlreadyAuthenticatedRoute>} />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Navbar />
+                  <Profile />
+                  <Footer />
+                </ProtectedRoute>} />
+            </Routes>
+          </AuthProvider>
+        </ShoppingCartProvider>
       </BrowserRouter>
     </div>
   );

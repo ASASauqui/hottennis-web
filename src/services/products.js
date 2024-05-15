@@ -1,5 +1,5 @@
 export const getProducts = async () => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/products`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/products`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -9,7 +9,7 @@ export const getProducts = async () => {
 };
 
 export const getProduct = async (id) => {
-    return await fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/products/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
