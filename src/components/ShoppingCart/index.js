@@ -8,11 +8,13 @@ import { toast } from 'react-toastify';
 import { getProduct } from '../../services/products';
 import { createCheckoutSession } from '../../services/payments';
 import RippleButton from '../../components/Buttons/RippleButton';
+import { useNavigate } from 'react-router-dom';
 
 function ShoppingCart() {
     const { user } = useAuth();
     const { shoppingCart, showShoppingCart, addItem, removeItem, setItemQuantity, emptyCart, setShowShoppingCart } = useShoppingCart();
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
 
     const getTotalPrice = () => {
         if (products.length === 0 || shoppingCart.length === 0) {
@@ -38,35 +40,45 @@ function ShoppingCart() {
         }).format(price);
     };
 
-    const makePayment = async () => {
+    // const makePayment = async () => {
+    //     if (products.length === 0) {
+    //         return;
+    //     }
+
+    //     try {
+    //         const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+    //         const response = await createCheckoutSession(user.token, products);
+    //         const session = await response.json();
+
+    //         if (response.ok === false) {
+    //             toast.error('Error al procesar el pago');
+    //             return;
+    //         }
+
+    //         const result = stripe.redirectToCheckout({
+    //             sessionId: session.id,
+    //         });
+
+    //         if (result.error) {
+    //             toast.error('Error al procesar el pago');
+    //         }
+
+    //         emptyCart();
+    //     } catch (error) {
+    //         toast.error('Error al procesar el pago');
+    //     }
+    // };
+
+    const redirectToCheckout = async () => {
         if (products.length === 0) {
             return;
         }
 
-        try {
-            const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+        setShowShoppingCart(false);
+        navigate('/checkout');
 
-            const response = await createCheckoutSession(user.token, products);
-            const session = await response.json();
-
-            if (response.ok === false) {
-                toast.error('Error al procesar el pago');
-                return;
-            }
-
-            const result = stripe.redirectToCheckout({
-                sessionId: session.id,
-            });
-
-            if (result.error) {
-                toast.error('Error al procesar el pago');
-            }
-
-            emptyCart();
-        } catch (error) {
-            toast.error('Error al procesar el pago');
-        }
-    };
+    }
 
 
     useEffect(() => {
@@ -85,6 +97,8 @@ function ShoppingCart() {
                 return null;
             });
 
+            console.log(shoppingCart)
+
             var products = await Promise.all(promises);
 
             // Remove null values
@@ -94,7 +108,8 @@ function ShoppingCart() {
             products = products.map((product, index) => {
                 return {
                     ...product,
-                    quantity: shoppingCart[index].quantity
+                    quantity: shoppingCart[index].quantity,
+                    size: shoppingCart[index].size
                 };
             });
 
@@ -141,7 +156,7 @@ function ShoppingCart() {
                                             <div className="md:pl-3 md:w-8/12 2xl:w-3/4 flex flex-col justify-center">
                                                 <div className="flex flex-col gap-2">
                                                     <span className="text-xs leading-3 text-gray-800 font-semibold">Nombre del producto:</span>
-                                                    <p className="text-xs leading-3 text-gray-800">{item.title}</p>
+                                                    <p className="text-xs leading-3 text-gray-800">{item.title} ({item.size})</p>
                                                 </div>
                                                 <div className="flex flex-col gap-2 mt-4">
                                                     <span className="text-xs leading-3 text-gray-800 font-semibold">Marca:</span>
@@ -191,7 +206,7 @@ function ShoppingCart() {
                                         onClick={() => emptyCart()}
                                         textColor="text-white" />
                                     <RippleButton text="Comprar" type="button" color="bg-black"
-                                        onClick={() => makePayment()}
+                                        onClick={() => redirectToCheckout()}
                                         textColor="text-white" />
                                 </div>
                             )}

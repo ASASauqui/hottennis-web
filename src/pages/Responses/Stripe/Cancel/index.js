@@ -1,9 +1,27 @@
 import { useNavigate } from 'react-router-dom';
 import RippleButton from '../../../../components/Buttons/RippleButton';
+import { useEffect } from 'react';
+import { useAuth } from '../../../../hooks/useAuth';
+import { updateOrderStatus } from '../../../../services/orders';
+import { useSearchParams } from 'react-router-dom';
 
 function StripeCancel() {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { user } = useAuth();
 
+    useEffect(() => {
+        updateStatus();
+    }, []);
+
+    const updateStatus = async () => {
+
+        const response = await updateOrderStatus(user.token, searchParams.get('order_id'), 'Payment failed');
+
+        if (response.ok) {
+            console.log('Order status updated');
+        }
+    }
     return (
         <div className="mx-auto sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-screen px-5">

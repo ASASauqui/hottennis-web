@@ -55,7 +55,7 @@ function Addresses() {
                     {/* No addresses */}
                     {addresses.length === 0 && (
                         <div className="flex justify-center items-center">
-                            <p className="text-gray-500">No vulnerabilidades encontradas</p>
+                            <p className="text-gray-500">Direcciones no encontradas</p>
                         </div>
                     )}
 

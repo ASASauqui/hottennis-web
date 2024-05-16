@@ -11,6 +11,8 @@ import RippleButton from '../../components/Buttons/RippleButton';
 
 import ImageCover from '../../assets/images/tennis_cover_2.webp';
 
+import { updatePassword } from '../../services/users';
+
 function Profile() {
     const { user, updateUser } = useAuth();
 
@@ -55,7 +57,30 @@ function Profile() {
             newPassword: Yup.string().required('Requerido').min(6, 'La contraseña debe tener al menos 6 caracteres'),
             confirmPassword: Yup.string().required('Requerido').oneOf([Yup.ref('newPassword'), null], 'Las contraseñas no coinciden'),
         }),
-        onSubmit: (values) => {
+        onSubmit: async (values) => {
+            if (values.currentPassword === values.newPassword) {
+                toast.error('La nueva contraseña debe ser diferente a la actual');
+                return;
+            }
+
+            // regex to validate password
+            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
+
+            if (!passwordRegex.test(values.newPassword)) {
+                toast.error('La contraseña debe tener al menos 6 caracteres, una letra mayúscula, una letra minúscula y un número');
+                return;
+            }
+
+            const response = await updatePassword(user.token, values);
+
+
+            if (response.ok) {
+                toast.success('Contraseña actualizada correctamente');
+                formikPassword.resetForm();
+            }
+            else {
+                toast.error('Error al actualizar la contraseña');
+            }
 
         },
     });
@@ -88,7 +113,12 @@ function Profile() {
                     <p className="text-lg font-semibold text-neutral-500 mt-2">+52 {formatPhone(user.user.phone)}</p>
                 </div>
 
+
                 <div className="flex flex-col justify-center items-center gap-20 p-10 mt-10">
+                    <div className='md:w-1/2 md:flex-col sm:flex-col sm:w-full mx-auto flex justify-around items-center -mt-10'>
+                        <a href='/orders' className="w-full flex justify-center items-center py-2 px-4 m-2 rounded-lg bg-primary border-2 text-center border-transparent text-white text-md font-bold hover:bg-primary-hover">Mis pedidos</a>
+                        <a href='/addresses' className="w-full flex justify-center items-center py-2 px-4 m-2 rounded-lg bg-primary border-2 text-center border-transparent text-white text-md font-bold hover:bg-primary-hover">Mis direcciones</a>
+                    </div>
                     <div className="w-full sm:w-[600px] md:w-[750px] flex flex-col gap-2">
                         <h1 className="text-2xl font-semibold">Actualizar Detalles</h1>
                         <form onSubmit={formikDetails.handleSubmit} className="w-full flex flex-col gap-7 p-5 shadow-lg rounded-lg bg-white border border-gray-200">

@@ -1,8 +1,30 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import RippleButton from '../../../../components/Buttons/RippleButton';
+import { useEffect } from 'react';
+import { useAuth } from '../../../../hooks/useAuth';
+import { updateOrderStatus } from '../../../../services/orders';
 
 function StripeSuccess() {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { user } = useAuth();
+
+    useEffect(() => {
+        updateStatus();
+    }, []);
+
+    const updateStatus = async () => {
+
+        const response = await updateOrderStatus(user.token, searchParams.get('order_id'), 'Not processed');
+
+        if (response.ok) {
+            console.log('Order status updated');
+        }
+        else {
+            navigate(`/cancel/order_id=${searchParams.get('order_id')}`)
+        }
+
+    }
 
     return (
         <div className="mx-auto sm:px-6 lg:px-8">

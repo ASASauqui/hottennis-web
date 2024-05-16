@@ -11,6 +11,7 @@ function Navbar() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [totalAmountOfItems, setTotalAmountOfItems] = useState(0);
 
+
     const handleLogout = () => {
         logout();
     };

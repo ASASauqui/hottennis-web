@@ -8,8 +8,8 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import Product from "./pages/Product";
 import Checkout from "./pages/Checkout";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./pages/LogIn";
+import Signup from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Addresses from "./pages/Addresses";
 import StripeSuccess from "./pages/Responses/Stripe/Success";
@@ -20,6 +20,7 @@ import { AlreadyAuthenticatedRoute } from "./components/AlreadyAuthenticatedRout
 import { AuthProvider } from "./hooks/useAuth";
 import { ShoppingCartProvider } from "./hooks/useShoppingCart";
 import { AddressesProvider } from "./hooks/useAddresses";
+import Orders from "./pages/Orders";
 
 function App() {
   return (
@@ -82,6 +83,12 @@ function App() {
                     <Addresses />
                     <Footer />
                   </ProtectedRoute>} />
+                <Route path="/orders" element={
+                  <ProtectedRoute>
+                    <Navbar />
+                    <Orders />
+                    <Footer />
+                  </ProtectedRoute>} />
                 <Route path="/success" element={
                   <>
                     <Navbar />
@@ -94,6 +101,12 @@ function App() {
                     <Navbar />
                     <StripeCancel />
                     <Footer />
+                  </>
+                } />
+                <Route path="*" element={
+                  <>
+                    <Navbar />
+                    <h1 className="text-center text-4xl font-semibold mt-10 ">Pagina no encontrada :(</h1>
                   </>
                 } />
               </Routes>

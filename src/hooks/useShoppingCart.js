@@ -11,15 +11,15 @@ export const ShoppingCartProvider = ({ children }) => {
     const navigate = useNavigate();
 
     // Call this function when you want to add an item to the shopping cart
-    const addItem = (id) => {
-        const item = shoppingCart.find((item) => item.id === id);
+    const addItem = (id, size) => {
+        const item = shoppingCart.find((item) => item.id === id && item.size === size);
 
         if (item) {
             const newShoppingCart = shoppingCart.map((item) => {
                 if (item.id === id) {
                     return {
                         ...item,
-                        quantity: item.quantity + 1
+                        quantity: item.quantity + 1,
                     };
                 }
                 return item;
@@ -28,7 +28,7 @@ export const ShoppingCartProvider = ({ children }) => {
             setShoppingCart(newShoppingCart);
         }
         else {
-            const newShoppingCart = [...shoppingCart, { id: id, quantity: 1 }];
+            const newShoppingCart = [...shoppingCart, { id: id, quantity: 1, size: size}];
             setShoppingCart(newShoppingCart);
         }
     };

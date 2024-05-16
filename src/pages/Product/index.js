@@ -5,12 +5,16 @@ import { useParams } from 'react-router-dom';
 import { useShoppingCart } from '../../hooks/useShoppingCart';
 import { getProduct } from '../../services/products';
 import RippleButton from '../../components/Buttons/RippleButton';
+import { toast } from 'react-toastify';
+
+const sizes = ['6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12'];
 
 function Product() {
     const { id } = useParams();
     const { addItem } = useShoppingCart();
     const [product, setProduct] = useState(null);
     const [imageIndex, setImageIndex] = useState(0);
+    const [selectedSize, setSelectedSize] = useState(null);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -38,7 +42,8 @@ function Product() {
     };
 
     const handleAddToCart = () => {
-        addItem(id);
+        addItem(id, selectedSize);
+        toast.success('Producto añadido al carrito');
     };
 
     return (
@@ -84,11 +89,11 @@ function Product() {
                             <div className="mb-4">
                                 <span className="font-bold text-gray-700">Seleccionar talla:</span>
                                 <div className="flex items-center mt-2">
-                                    <button className="bg-gray-300  text-gray-700  py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400">S</button>
-                                    <button className="bg-gray-300  text-gray-700  py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400">M</button>
-                                    <button className="bg-gray-300  text-gray-700  py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400">L</button>
-                                    <button className="bg-gray-300  text-gray-700  py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400">XL</button>
-                                    <button className="bg-gray-300  text-gray-700  py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400">XXL</button>
+                                    {sizes.map((size, index) => (
+                                        <button key={index} className={`mr-2 px-3 py-1 rounded-lg border border-gray-300 ${selectedSize === size ? 'bg-primary text-white' : 'bg-white text-gray-700'}`} onClick={() => setSelectedSize(size)}>
+                                            {size}
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                             <div>
@@ -101,6 +106,7 @@ function Product() {
 
                             <div>
                                 <RippleButton type="submit" text="Añadir al carrito"
+                                disabled={selectedSize === null}
                                 onClick={handleAddToCart}
                                 color="bg-primary" />
                             </div>

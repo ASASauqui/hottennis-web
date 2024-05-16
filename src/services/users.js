@@ -50,3 +50,14 @@ export const updateUserInfo = async (token, body) => {
         body: JSON.stringify(body)
     });
 };
+
+export const updatePassword = async (token, body) => {
+    return await fetch(`${process.env.REACT_APP_API_URL}/api/users/change-password`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(body)
+    });
+}
