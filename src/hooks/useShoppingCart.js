@@ -32,16 +32,22 @@ export const ShoppingCartProvider = ({ children }) => {
             setShoppingCart(newShoppingCart);
         }
     };
-
+ 
     // Call this function when you want to remove an item from the shopping cart
-    const removeItem = (id) => {
-        const newShoppingCart = shoppingCart.filter((item) => item.id !== id);
+    const removeItem = (id, size) => {
+        // if shopping cart has another item with the same id and different size, delete only the item with the same id and size
+
+        const item = shoppingCart.find((item) => item.id === id && item.size === size);
+
+        //remove that item from the shopping cart
+        const newShoppingCart = shoppingCart.filter((_item) => _item !== item);
+
         setShoppingCart(newShoppingCart);
     };
 
-    const setItemQuantity = (id, quantity) => {
+    const setItemQuantity = (id, quantity, size) => {
         const newShoppingCart = shoppingCart.map((item) => {
-            if (item.id === id) {
+            if (item.id === id && item.size == size) {
                 return {
                     ...item,
                     quantity: quantity

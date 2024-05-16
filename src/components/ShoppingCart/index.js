@@ -26,10 +26,10 @@ function ShoppingCart() {
         }, 0);
     };
 
-    const handleOnChangeItemQuantity = (id, quantity) => {
+    const handleOnChangeItemQuantity = (id, quantity, size) => {
         quantity = parseInt(quantity, 10)
 
-        setItemQuantity(id, quantity)
+        setItemQuantity(id, quantity, size)
     };
 
     const formatPrice = (price) => {
@@ -172,7 +172,7 @@ function ShoppingCart() {
                                                     <div className="flex flex-col items-start gap-2">
                                                         <p className="text-xs leading-3 text-gray-800 font-semibold">Cantidad:</p>
                                                         <input type="number" min="1" value={item.quantity}
-                                                            onChange={(e) => handleOnChangeItemQuantity(item._id, e.target.value)}
+                                                            onChange={(e) => handleOnChangeItemQuantity(item._id, e.target.value, item.size)}
                                                             className="w-16 h-8 border border-gray-300 rounded-md text-xs text-gray-800 text-center p-3" />
 
                                                     </div>
@@ -182,7 +182,7 @@ function ShoppingCart() {
                                                 <div className="flex items-center justify-between pt-5">
                                                     <div className="flex itemms-center">
                                                         <p
-                                                            onClick={() => removeItem(item._id)}
+                                                            onClick={() => removeItem(item._id, item.size)}
                                                             className="text-xs leading-3 underline text-red-500 cursor-pointer">Remove</p>
                                                     </div>
                                                 </div>

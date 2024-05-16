@@ -122,10 +122,10 @@ function Checkout() {
     };
 
 
-    const handleOnChangeItemQuantity = (id, quantity) => {
+    const handleOnChangeItemQuantity = (id, quantity, size) => {
         quantity = parseInt(quantity, 10)
 
-        setItemQuantity(id, quantity)
+        setItemQuantity(id, quantity, size)
     };
 
     const formatPrice = (price) => {
@@ -160,14 +160,14 @@ function Checkout() {
                                             <div className="flex flex-col items-start gap-2">
                                                 <p className="text-xs leading-3 text-gray-800 font-semibold">Cantidad:</p>
                                                 <input type="number" min="1" value={item.quantity}
-                                                    onChange={(e) => handleOnChangeItemQuantity(item._id, e.target.value)}
+                                                    onChange={(e) => handleOnChangeItemQuantity(item._id, e.target.value, item.size)}
                                                     className="w-16 h-8 border border-gray-300 rounded-md text-xs text-gray-800 text-center p-3" />
                                             </div>
                                         </div>
                                         <p className="text-xs leading-3 text-gray-600 pt-2">Talla: {item.size}</p>
                                         <div className="flex items-center justify-between pt-5">
                                             <div className="flex itemms-center">
-                                                <p className="text-xs leading-3 underline text-red-500 cursor-pointer" onClick={() => removeItem(item._id)}>Eliminar</p>
+                                                <p className="text-xs leading-3 underline text-red-500 cursor-pointer" onClick={() => removeItem(item._id, item.size)}>Eliminar</p>
                                             </div>
                                             <p className="text-base font-black leading-none text-gray-800">{formatPrice(item.price * item.quantity)}</p>
                                         </div>
