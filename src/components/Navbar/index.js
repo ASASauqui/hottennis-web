@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useShoppingCart } from '../../hooks/useShoppingCart';
 import ShoppingCart from '../ShoppingCart';
+import logo from '../../assets/images/hottennis_logo-nobg.png';
 
 function Navbar() {
     const { user, logout } = useAuth();
@@ -62,7 +63,7 @@ function Navbar() {
                             className="mb-4 me-5 ms-2 mt-3 flex items-center text-neutral-900 hover:text-neutral-900 focus:text-neutral-900 lg:mb-0 lg:mt-0"
                             href="#">
                             <img
-                                src="https://tecdn.b-cdn.net/img/logo/te-transparent-noshadows.webp"
+                                src={logo}
                                 style={{ height: '15px' }}
                                 alt="TE Logo"
                                 loading="lazy" />

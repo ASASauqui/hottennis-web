@@ -1,5 +1,5 @@
 import './index.css';
-import Logo from '../../assets/images/hottennis_logo.png';
+import Logo from '../../assets/images/hottennis_logo-nobg.png';
 
 function Footer() {
     return (
